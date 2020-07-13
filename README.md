@@ -1,8 +1,8 @@
 # *Genvisage* - Rapid Identification of Discriminative Feature Pairs for Genomic Analysis
 Silu Huang [shuang86@illinois.edu] Charles Blatti [blatti@illinois.edu], Saurabh Sinha, and Aditya Parameswaran
 
-KnowEnG BD2K Center of Excellence  
-University of Illinois Urbana-Champaign  
+KnowEnG BD2K Center of Excellence
+University of Illinois Urbana-Champaign
 
 ## Table of Contents
 1. [Motivation](#motivation)
@@ -36,9 +36,14 @@ To use the [full feature-gene matrix](http://veda.cs.uiuc.edu/RWR/tmp/feature_ge
 gunzip feature_gene_scale.selected.txt.gz
 ```
 
-### Local copy of Genvisage repository
-Alternatively, a docker image containing this repo and the compiled source code is available at: 
-[https://hub.docker.com/r/knowengdev/genvisage](https://hub.docker.com/r/knowengdev/genvisage) 
+### Run Genvisage through Docker container
+1. Check on [https://hub.docker.com/u/knowengdev](https://hub.docker.com/u/knowengdev) to get the latest image tag.
+
+2. Change directory to the directory where you want to run and start the container.
+```
+docker run -v \`pwd\`:\`pwd\` -it knowengdev/genvisage:latest /bin/bash
+```
+3. Inside the container, access the executable at `/usr/src/genvisage/rocchio` and read and write files to your mounted volume.
 
 [Return to TOC](#table-of-contents)
 
@@ -49,14 +54,14 @@ This section of the README is meant to walk a user through a process of using Ge
 ![Method Overview](images/genvisage_overview.png)
 
 ### Feature-object Matrix
-The user can use their own feature-object matrix for analysis, where the value in each cell denotes the feature value for each corresponding gene. The format of feature matrix can be found [here](#-matrixF). 
+The user can use their own feature-object matrix for analysis, where the value in each cell denotes the feature value for each corresponding gene. The format of feature matrix can be found [here](#-matrixF).
 
-User can also use [our provided feature-gene matrix](http://veda.cs.uiuc.edu/RWR/tmp/feature_gene_scale.selected.txt.gz) with 3,632 Gene Ontology annotation terms as the features and with 22,210 gene objects. Rather than being a 0/1 membership indicator matrix, the features of this matrix represent the diffusion of the gene across a heterogeneous network of prior knowledge about the annotation of and the relationships between genes (see [DRaWR](https://www.ncbi.nlm.nih.gov/pubmed/27153592) method for more details). The prior knowledge in the heterogeneous network used here included annotations from [Gene Ontology](http://www.geneontology.org/), [KEGG](https://www.genome.jp/kegg/), [Reactome](https://reactome.org/), and [Pfam](https://pfam.xfam.org/) as well as gene-gene relationships from protein similarity defined by [BLASTP](https://blast.ncbi.nlm.nih.gov/Blast.cgi?PAGE=Proteins). After diffusion was performed, 3,632 Gene Ontology terms were extracted creating a term-gene matrix where each value represents the scaled probability that a random walk started at the gene would be at the Gene Ontology term. 
+User can also use [our provided feature-gene matrix](http://veda.cs.uiuc.edu/RWR/tmp/feature_gene_scale.selected.txt.gz) with 3,632 Gene Ontology annotation terms as the features and with 22,210 gene objects. Rather than being a 0/1 membership indicator matrix, the features of this matrix represent the diffusion of the gene across a heterogeneous network of prior knowledge about the annotation of and the relationships between genes (see [DRaWR](https://www.ncbi.nlm.nih.gov/pubmed/27153592) method for more details). The prior knowledge in the heterogeneous network used here included annotations from [Gene Ontology](http://www.geneontology.org/), [KEGG](https://www.genome.jp/kegg/), [Reactome](https://reactome.org/), and [Pfam](https://pfam.xfam.org/) as well as gene-gene relationships from protein similarity defined by [BLASTP](https://blast.ncbi.nlm.nih.gov/Blast.cgi?PAGE=Proteins). After diffusion was performed, 3,632 Gene Ontology terms were extracted creating a term-gene matrix where each value represents the scaled probability that a random walk started at the gene would be at the Gene Ontology term.
 A [sampled feature-gene matrix](data/matrix_sample.txt) with 50 Gene Ontology annotation terms as the features and with 5000 gene objects is provided in this git repository.
 
 ### Creating Gene Sets
 
-The first step is to create two gene sets for discriminative analysis, i.e., positive gene set vs. negative gene set, each stored in one file. The file format should list one gene name on each row. We also allow users to only input one positive gene set. In this instance, Genvisage will use all of the remaining genes in your feature-gene matrix as the negative gene set.   
+The first step is to create two gene sets for discriminative analysis, i.e., positive gene set vs. negative gene set, each stored in one file. The file format should list one gene name on each row. We also allow users to only input one positive gene set. In this instance, Genvisage will use all of the remaining genes in your feature-gene matrix as the negative gene set.
 
 As an example, uses can also [our provided positive gene set](data/DELYS_THYROID_CANCER), which contains 675 differentially expressed genes between papillary thyroid carcinoma (PTC) compared to normal tissue as the positive gene set. These genes were downloaded from the Molecular Signature Database (MSigDB) ([up regulated](http://software.broadinstitute.org/gsea/msigdb/cards/DELYS_THYROID_CANCER_UP.html), [down regulated](http://software.broadinstitute.org/gsea/msigdb/cards/DELYS_THYROID_CANCER_DN.html)) and the original publication can be found [here](https://www.ncbi.nlm.nih.gov/pubmed/17621275). Since only a positive gene set is provided, the remaining genes in the feature-object matrix will be used as the negative set for the example.
 
@@ -83,7 +88,7 @@ Next, we will first illustrate some example runs. Here we only input one positiv
 
 #### EarlyOrdering Mode Command
 ```
-./rocchio -matrixF /path/to/your/feature-matrix -expF /path/to/your/positive-gene-set -outDir /path/to/your/output_fir -weighted -earlyT -sortG 
+./rocchio -matrixF /path/to/your/feature-matrix -expF /path/to/your/positive-gene-set -outDir /path/to/your/output_fir -weighted -earlyT -sortG
 ```
 
 #### SampOpt Mode Command
@@ -95,23 +100,23 @@ Next, we will first illustrate some example runs. Here we only input one positiv
 #### HorizSampOpt Mode Command
 
 ```
-./rocchio -matrixF /path/to/your/feature-matrix -expF /path/to/your/positive-gene-set -outDir /path/to/your/output_fir -weighted -samplOpt -Fconsider 500000 -sortF 
+./rocchio -matrixF /path/to/your/feature-matrix -expF /path/to/your/positive-gene-set -outDir /path/to/your/output_fir -weighted -samplOpt -Fconsider 500000 -sortF
 ```
 
 
-## Command Configs 
+## Command Configs
 Next, we describe the different parameters in the running command.
 
 ### -matrixF
 The string after -matrixF specifies the file storing the feature-gene matrix we will use in Genvisage. The first row in the file depicts the feature names. Afterwards, each row in the file represents a gene, starting with the gene name, followed by the feature values separated by comma. Please refer to [our sampled feature-object matrix](data/matrix_sample.txt) for example.
 
 ### -expF
-The default experiment discriminates the input positive genes from all the remaining genes in the feature-gene matrix. The string after -expF specifies the file storing the positive gene set. Each row in the file is a gene. Please refer to [our provided positive gene set](data/DELYS_THYROID_CANCER). 
+The default experiment discriminates the input positive genes from all the remaining genes in the feature-gene matrix. The string after -expF specifies the file storing the positive gene set. Each row in the file is a gene. Please refer to [our provided positive gene set](data/DELYS_THYROID_CANCER).
 
-The user can perform Genvisage to discriminate an input positive gene set from another input negative gene set, by adding "-pos_neg" in the command line and specifying the positive gene get file after "-expF" and negative gene set file after "-expF2". An example command is as below:   
+The user can perform Genvisage to discriminate an input positive gene set from another input negative gene set, by adding "-pos_neg" in the command line and specifying the positive gene get file after "-expF" and negative gene set file after "-expF2". An example command is as below:
 
 ```
-./rocchio -matrixF /path/to/your/feature-matrix -pos_neg -expF /path/to/your/positive-gene-set -expF2 /path/to/your/negative-gene-set -outDir /path/to/your/output_fir -weighted -earlyT -sortG 
+./rocchio -matrixF /path/to/your/feature-matrix -pos_neg -expF /path/to/your/positive-gene-set -expF2 /path/to/your/negative-gene-set -outDir /path/to/your/output_fir -weighted -earlyT -sortG
 ```
 
 ### -outDir
@@ -130,13 +135,33 @@ This flag enables gene sorting based on single feature property before evaluatin
 ### -samplOpt
 This flag corresponds the [SampOpt Mode](#SampOpt-Mode).
 
-### -Fconsider 
+### -Fconsider
 Instead of evaluating all possible feature pairs, it greedily only examines a subset of (e.g., 500,000) feature pairs for possible candidates. This number is specified after "-Fconsider".
 
 ### -sortF
 This flag first sort features based on single feature property, and then traverse the feature pairs in this sorted feature ordering. This is especially useful when we only consider a subser of feature pairs as the candidates, i.e., [-Fconsider](#-Fconsider), since "-sortF" essentially helps select the good candidate feature pairs.
 
 ### -vertical
-This flag defines the feature pair traversal ordering. In vertical traversal, we require both features perform well on their own in order to form a feature pair candidate. The default is horizontal traversal as in [HorizSampOpt Mode](#HorizSampOpt-Mode), where at least one feature performs well on its own and we pair it with all other features and form a feature pair candidate. This flag is usually coupled with "-sortF", otherwise, different traversal mechanism is simply randomly picking feature pairs.  
+This flag defines the feature pair traversal ordering. In vertical traversal, we require both features perform well on their own in order to form a feature pair candidate. The default is horizontal traversal as in [HorizSampOpt Mode](#HorizSampOpt-Mode), where at least one feature performs well on its own and we pair it with all other features and form a feature pair candidate. This flag is usually coupled with "-sortF", otherwise, different traversal mechanism is simply randomly picking feature pairs.
 
 [Return to TOC](#table-of-contents)
+
+## Building the Genvisage Docker Image
+The Dockerfile in this directory contains all the commands, in order, needed to build the **Genvisage** Docker image.
+
+
+* Build the **Genvisage** Docker image with :
+```
+    docker build -t [image_tag:version] .
+```
+
+* Login to docker hub. When prompted, enter your password and press enter:
+```
+    docker login
+```
+
+* Upload your image to docker hub:
+```
+    docker login [image_tag:version]
+```
+
