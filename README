@@ -1,5 +1,5 @@
 # Building the Genvisage Docker Image
-The Dockefile in this directory contains all the commands, in order, needed to build the **Genvisage** Docker image.
+The Dockerfile in this directory contains all the commands, in order, needed to build the **Genvisage** Docker image.
 
 
 * Build the **Genvisage** Docker image with :
@@ -17,12 +17,14 @@ The Dockefile in this directory contains all the commands, in order, needed to b
     docker login [image_tag:version]
 ```
 
-* * *
-## How to run this docker image
-* * *
-### 1. Check on https://hub.docker.com/u/knowengdev to get the latest image tag.
+# How to run this docker image
+1. Check on https://hub.docker.com/u/knowengdev to get the latest image tag.
 
-### 2. Change directory to the directory where you want to run and start the container.
+2. Change directory to the directory where you want to run and start the container.
 ```
 docker run -v \`pwd\`:\`pwd\` -it knowengdev/genvisage:latest /bin/bash
 ```
+3. Inside the container, access the executable at `/usr/src/genvisage` and read and write files to your mounted volume.
+
+# For more information
+Check out the more details about the methods and the source code at [https://github.com/KnowEnG/Genvisage](https://github.com/KnowEnG/Genvisage)
