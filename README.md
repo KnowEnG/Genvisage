@@ -28,13 +28,17 @@ Our tool, Genvisage, enables researchers to interactively identify visually inte
 
 If you wish to use the sample files necessary to complete this tutorial or the datasets from the paper, first clone this repository from github:
 ```
-git clone https://github.com/slhuang/Genvisage.git
+git clone https://github.com/KnowEnG/Genvisage.git
 ```
 
 To use the [full feature-gene matrix](http://veda.cs.uiuc.edu/RWR/tmp/feature_gene_scale.selected.txt.gz) described [below](#Feature-object-Matrix), you must first unzip its contents:
 ```
 gunzip feature_gene_scale.selected.txt.gz
 ```
+
+### Local copy of Genvisage repository
+Alternatively, a docker image containing this repo and the compiled source code is available at: 
+[https://hub.docker.com/r/knowengdev/genvisage](https://hub.docker.com/r/knowengdev/genvisage) 
 
 [Return to TOC](#table-of-contents)
 
